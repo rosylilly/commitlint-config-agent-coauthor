@@ -1,0 +1,58 @@
+name: Nightly (GitHub Packages)
+
+# Every push to main publishes a prerelease to GitHub Packages under the
+# org-scoped name (@owner/...). Stable releases go to npmjs.org via release-please
+# only — nightlies are never published there.
+on:
+  push:
+    branches: [main]
+
+permissions: {}
+
+concurrency:
+  group: nightly-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  nightly:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write # publish to GitHub Packages
+    steps:
+      - uses: actions/checkout@v6
+
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .tool-versions
+          cache: pnpm
+          registry-url: https://npm.pkg.github.com
+          scope: "@${{ github.repository_owner }}"
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          HUSKY: 0
+
+      - name: Build
+        run: pnpm run build
+
+      # GitHub Packages requires an org-scoped name. Rewrite name + version in CI
+      # only (never committed); npmjs.org keeps the unscoped name.
+      - name: Set nightly name and version
+        run: |
+          base_name="$(node -p "require('./package.json').name")"
+          base_version="$(node -p "require('./package.json').version")"
+          ts="$(date -u +%Y%m%d%H%M%S)"
+          npm pkg set "name=@${{ github.repository_owner }}/${base_name}"
+          npm pkg set "version=${base_version}-nightly.${ts}"
+          echo "Publishing $(node -p "require('./package.json').name")@$(node -p "require('./package.json').version")"
+
+      - name: Publish nightly to GitHub Packages
+        run: npm publish --tag nightly --ignore-scripts
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
