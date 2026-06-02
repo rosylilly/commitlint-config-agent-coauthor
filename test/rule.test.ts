@@ -3,11 +3,22 @@ import { test } from 'node:test';
 
 import parse from '@commitlint/parse';
 import type { AgentDefinition } from '../src/index.ts';
-import { agentCoauthor } from '../src/index.ts';
+import { agentCoauthor, agents, defaultAgents } from '../src/index.ts';
 
 const CLAUDE_ENV = { CLAUDECODE: '1' };
 
 const parsed = (message: string) => parse(message);
+
+test('exposes built-ins as a keyed record mirrored by defaultAgents', () => {
+  assert.deepEqual(Object.keys(agents), [
+    'claude',
+    'codex',
+    'gemini',
+    'cursor',
+  ]);
+  assert.deepEqual(defaultAgents, Object.values(agents));
+  assert.equal(agents.cursor.coAuthor.email, 'cursoragent@cursor.com');
+});
 
 test('passes when no agent environment variable is set', async () => {
   const [valid] = agentCoauthor(await parsed('feat: x'), 'always', { env: {} });

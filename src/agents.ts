@@ -5,7 +5,7 @@ import type { AgentDefinition } from './types.ts';
  * `Co-Authored-By: Claude <noreply@anthropic.com>`. The display name varies by
  * model ("Claude Opus 4.8", …) but the email is stable.
  */
-export const claude: AgentDefinition = {
+const claude: AgentDefinition = {
   id: 'claude',
   name: 'Claude Code',
   env: ['CLAUDECODE'],
@@ -16,7 +16,7 @@ export const claude: AgentDefinition = {
  * OpenAI Codex sets `CODEX_THREAD_ID` and (with commit attribution enabled)
  * credits `Co-authored-by: Codex <noreply@openai.com>`.
  */
-export const codex: AgentDefinition = {
+const codex: AgentDefinition = {
   id: 'codex',
   name: 'OpenAI Codex',
   env: ['CODEX_THREAD_ID'],
@@ -27,7 +27,7 @@ export const codex: AgentDefinition = {
  * Gemini CLI sets `GEMINI_CLI=1`; the suggested attribution is
  * `Co-Authored-By: Gemini <gemini-code-assist@google.com>`.
  */
-export const gemini: AgentDefinition = {
+const gemini: AgentDefinition = {
   id: 'gemini',
   name: 'Gemini CLI',
   env: ['GEMINI_CLI'],
@@ -39,12 +39,24 @@ export const gemini: AgentDefinition = {
  * documented way to detect a Cursor session from a shell config — and credits
  * `Co-authored-by: Cursor <cursoragent@cursor.com>`.
  */
-export const cursor: AgentDefinition = {
+const cursor: AgentDefinition = {
   id: 'cursor',
   name: 'Cursor CLI',
   env: ['CURSOR_AGENT'],
   coAuthor: { name: 'Cursor', email: 'cursoragent@cursor.com' },
 };
 
+/**
+ * Built-in agent definitions, keyed by {@link AgentDefinition.id}. Pick one to
+ * reuse or override (`agents.cursor`); the set of keys grows as agents are
+ * added, but this export's identity does not.
+ */
+export const agents = {
+  claude,
+  codex,
+  gemini,
+  cursor,
+} satisfies Record<string, AgentDefinition>;
+
 /** Built-in agents checked by default. Override via the rule's `agents` option. */
-export const defaultAgents: AgentDefinition[] = [claude, codex, gemini, cursor];
+export const defaultAgents: AgentDefinition[] = Object.values(agents);
