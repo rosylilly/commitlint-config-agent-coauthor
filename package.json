@@ -26,6 +26,7 @@
     "dist",
     "README.md"
   ],
+  "sideEffects": false,
   "scripts": {
     "build": "tsc -p tsconfig.build.json && node scripts/rewrite-dts-extensions.mjs",
     "clean": "rm -rf dist",
@@ -36,6 +37,17 @@
   },
   "author": "Sho KUSANO <rosylilly@aduca.org>",
   "license": "MIT",
+  "homepage": "https://github.com/rosylilly/commitlint-config-agent-coauthor#readme",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/rosylilly/commitlint-config-agent-coauthor.git"
+  },
+  "bugs": {
+    "url": "https://github.com/rosylilly/commitlint-config-agent-coauthor/issues"
+  },
+  "engines": {
+    "node": ">=18"
+  },
   "peerDependencies": {
     "@commitlint/types": ">=19"
   },
