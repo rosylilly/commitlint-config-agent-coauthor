@@ -26,6 +26,15 @@ This package exists to enforce honest AI attribution. Whatever you change, that 
 - Prefer the smallest change that does the job, one logical change per PR, and commit messages that explain *why*, not just *what*.
 - Write Markdown prose as one line per paragraph — never hard-wrap at a fixed column. Manual line breaks render raggedly wherever the source isn't re-flowed (the repo description, npm, plain-text views) and make prose edits noisier in diffs; leave wrapping to the renderer.
 
+## Adding an agent
+
+The built-in registry grows as new coding agents ship; new candidates are tracked as issues under the supported-agent expansion epic. Hold every addition to the same bar and shape so the rule stays trustworthy and the exports stay stable.
+
+- The bar: only add an agent that (a) sets a detectable environment variable *at commit time* (so the `commit-msg` hook can see it) and (b) emits or documents a `Co-authored-by` identity. Cloud agents that commit in their own environment with inverted authorship — agent as author, human as co-author — are out of scope.
+- Verify both signals from a primary source (the agent's own docs or source), not a blog post; env-var names and co-author emails drift between releases.
+- Make the whole change in one PR: a module-private `AgentDefinition` in `src/agents.ts` (doc comment citing the env var, the identity, and the source) → a key in the `agents` record → a row in the README "How it works" table → a test mirroring an existing agent (detection via its env var, plus crediting its email passes).
+- Match on email, not display name — addresses are stable, names are not (`Claude`, `Claude Opus 4.8`, …). `defaultAgents` is derived from `agents`, so never hand-edit it.
+
 ## The trailer is the product
 
 You enforce it on everyone else, so hold yourself to it: when you commit as an agent, actually credit yourself with the `Co-authored-by` trailer. Never strip or fake it just to get a commit through — that defeats the reason this project exists.
