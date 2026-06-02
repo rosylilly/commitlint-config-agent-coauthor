@@ -25,7 +25,7 @@ Matching is by **email** by default — display names drift between releases (`C
 ## Install
 
 ```sh
-pnpm add -D commitlint-config-agent-coauthor @commitlint/cli @commitlint/config-conventional
+pnpm add -D commitlint-config-agent-coauthor
 ```
 
 ## Usage
