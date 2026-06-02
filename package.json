@@ -24,6 +24,7 @@
   },
   "files": [
     "dist",
+    "src",
     "README.md"
   ],
   "sideEffects": false,
