@@ -1,0 +1,45 @@
+name: Commit Lint
+
+on:
+  pull_request:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: commitlint-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  commitlint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+        with:
+          fetch-depth: 0 # need the full range to lint every commit in the PR
+
+      # action-setup reads the pnpm version from the packageManager field.
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .tool-versions
+          cache: pnpm
+
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          HUSKY: 0 # skip git-hook setup (prepare script) in CI
+
+      # Lint every commit in the PR against this repo's commitlint config. The
+      # agent-coauthor rule is environment-gated (CLAUDECODE / CODEX_THREAD_ID /
+      # GEMINI_CLI / …); with no agent env on the runner it is a no-op, so only
+      # the Conventional Commits rules are enforced here.
+      - name: Lint PR commits
+        run: >-
+          pnpm exec commitlint
+          --from ${{ github.event.pull_request.base.sha }}
+          --to ${{ github.event.pull_request.head.sha }}
+          --verbose
