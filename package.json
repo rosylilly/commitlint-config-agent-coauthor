@@ -2,6 +2,7 @@
   "name": "commitlint-config-agent-coauthor",
   "type": "module",
   "version": "1.0.0",
+  "packageManager": "pnpm@11.5.0",
   "description": "Shareable commitlint config that requires a Co-authored-by trailer for AI agents (Claude Code, OpenAI Codex, Gemini CLI, …) detected via environment variables.",
   "keywords": [
     "commitlint",
@@ -35,13 +36,6 @@
   },
   "author": "Sho KUSANO <rosylilly@aduca.org>",
   "license": "MIT",
-  "devEngines": {
-    "packageManager": {
-      "name": "pnpm",
-      "version": "^11.5.0",
-      "onFail": "download"
-    }
-  },
   "peerDependencies": {
     "@commitlint/types": ">=19"
   },

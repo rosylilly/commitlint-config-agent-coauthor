@@ -30,24 +30,10 @@ jobs:
     steps:
       - uses: actions/checkout@v6
 
-      # Single source of truth for the pnpm version is devEngines.packageManager
-      # in package.json. Read it here (using the runner's preinstalled Node) and
-      # hand it to action-setup, whose `version` input accepts a semver range.
-      - name: Resolve pnpm version from package.json
-        id: pnpm-version
-        run: |
-          version="$(node -p "require('./package.json').devEngines.packageManager.version")"
-          if [ -z "$version" ]; then
-            echo "::error::pnpm version not found in devEngines.packageManager"
-            exit 1
-          fi
-          echo "version=$version" >> "$GITHUB_OUTPUT"
-          echo "Using pnpm $version (from devEngines.packageManager)"
-
+      # action-setup reads the pnpm version from the packageManager field in
+      # package.json (the single source of truth), so no version input is needed.
       - name: Install pnpm
         uses: pnpm/action-setup@v6
-        with:
-          version: ${{ steps.pnpm-version.outputs.version }}
 
       - name: Setup Node.js
         uses: actions/setup-node@v6
