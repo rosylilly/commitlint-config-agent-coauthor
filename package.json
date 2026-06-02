@@ -1,0 +1,23 @@
+{
+  "name": "commitlint-config-agent-coauthor",
+  "type": "module",
+  "version": "1.0.0",
+  "scripts": {
+    "prepare": "husky"
+  },
+  "keywords": [],
+  "author": "Sho KUSANO <rosylilly@aduca.org>",
+  "license": "MIT",
+  "devEngines": {
+    "packageManager": {
+      "name": "pnpm",
+      "version": "^11.5.0",
+      "onFail": "download"
+    }
+  },
+  "devDependencies": {
+    "@commitlint/cli": "^21.0.2",
+    "@commitlint/config-conventional": "^21.0.2",
+    "husky": "^9.1.7"
+  }
+}
