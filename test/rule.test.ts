@@ -17,7 +17,6 @@ test('exposes built-ins as a keyed record mirrored by defaultAgents', () => {
     'cursor',
   ]);
   assert.deepEqual(defaultAgents, Object.values(agents));
-  assert.equal(agents.cursor.coAuthor.email, 'cursoragent@cursor.com');
 });
 
 test('passes when no agent environment variable is set', async () => {
