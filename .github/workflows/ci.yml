@@ -86,8 +86,8 @@ jobs:
       - name: Test
         run: pnpm test
 
-      - name: Build
-        run: pnpm run build
+      # No explicit build step: the `prepare` script builds during
+      # `pnpm install` above, so a broken build already fails this job.
 
       # Exercise the real consumer path: commitlint loads this repo's config
       # (which registers the plugin + rule) and lints sample messages.

@@ -57,10 +57,10 @@ jobs:
           node-version-file: .tool-versions
           cache: pnpm
           registry-url: https://registry.npmjs.org
+      # `prepare` builds dist during install; publish that with --ignore-scripts.
       - run: pnpm install --frozen-lockfile
         env:
           HUSKY: 0
-      - run: pnpm run build
       - run: npm publish --provenance --access public --ignore-scripts
         env:
           NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

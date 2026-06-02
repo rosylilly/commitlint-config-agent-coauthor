@@ -38,7 +38,7 @@
     "check:fix": "biome check --write",
     "test": "node --test",
     "prepack": "pnpm run clean && pnpm run build",
-    "prepare": "husky"
+    "prepare": "husky && npm run build"
   },
   "author": "Sho KUSANO <rosylilly@aduca.org>",
   "license": "MIT",
