@@ -119,6 +119,11 @@ pnpm build       # emit dist/ (JS + .d.ts) for publishing
 `pnpm build` compiles with `tsc` and rewrites the `.ts` import specifiers in the
 emitted declarations to `.js`. Publishing runs it automatically via `prepack`.
 
+## Changelog
+
+See [`CHANGELOG.md`](./CHANGELOG.md) or the
+[GitHub releases](https://github.com/rosylilly/commitlint-config-agent-coauthor/releases).
+
 ## License
 
 MIT © Sho KUSANO
