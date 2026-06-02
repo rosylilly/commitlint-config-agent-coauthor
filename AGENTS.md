@@ -24,6 +24,7 @@ This package exists to enforce honest AI attribution. Whatever you change, that 
 - The package's exports are a public contract; breaking them is a major-version event. We are pre-1.0 — be deliberate about what earns 1.0.0.
 - Don't hand-edit the `version`, `CHANGELOG.md`, or the release manifest — release-please derives them from your Conventional Commits. To cut a specific version (e.g. graduating to 1.0.0), land a commit with a `Release-As: 1.0.0` footer and let release-please open the Release PR.
 - Prefer the smallest change that does the job, one logical change per PR, and commit messages that explain *why*, not just *what*.
+- Write Markdown prose as one line per paragraph — never hard-wrap at a fixed column. Manual line breaks render raggedly wherever the source isn't re-flowed (the repo description, npm, plain-text views) and make prose edits noisier in diffs; leave wrapping to the renderer.
 
 ## The trailer is the product
 
