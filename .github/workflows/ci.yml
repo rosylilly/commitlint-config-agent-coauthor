@@ -13,16 +13,20 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
-  build:
+  test:
     runs-on: ubuntu-latest
+    # The integration surface is commitlint's API/types, not the Node version
+    # (the shipped artifact is plain JS). So we matrix over commitlint instead:
+    #   - locked: the devDependency pinned in the lockfile (reproducible baseline)
+    #   - 19/20:  validate the published `>=19` peer range
+    #   - latest: forward early-warning, allowed to fail so upstream releases
+    #             never block this repo's own changes.
     strategy:
       fail-fast: false
       matrix:
-        # The published package is plain JS, but the test suite runs the
-        # TypeScript sources directly via Node's native type stripping, which is
-        # unflagged on Node 24 (LTS) and 26 (current).
-        node-version: [24, 26]
-    name: node ${{ matrix.node-version }}
+        commitlint: [locked, "19", "20", latest]
+    name: commitlint ${{ matrix.commitlint }}
+    continue-on-error: ${{ matrix.commitlint == 'latest' }}
     steps:
       - uses: actions/checkout@v6
 
@@ -45,16 +49,30 @@ jobs:
         with:
           version: ${{ steps.pnpm-version.outputs.version }}
 
-      - name: Setup Node.js ${{ matrix.node-version }}
+      - name: Setup Node.js
         uses: actions/setup-node@v6
         with:
-          node-version: ${{ matrix.node-version }}
+          node-version-file: .tool-versions
           cache: pnpm
 
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
         env:
           HUSKY: 0 # skip git-hook setup (prepare script) in CI
+
+      - name: Override commitlint to '${{ matrix.commitlint }}'
+        if: matrix.commitlint != 'locked'
+        run: >-
+          pnpm add -D
+          @commitlint/cli@${{ matrix.commitlint }}
+          @commitlint/config-conventional@${{ matrix.commitlint }}
+          @commitlint/parse@${{ matrix.commitlint }}
+          @commitlint/types@${{ matrix.commitlint }}
+        env:
+          HUSKY: 0
+
+      - name: Report commitlint version under test
+        run: pnpm exec commitlint --version
 
       - name: Type-check
         run: pnpm run typecheck
@@ -64,3 +82,16 @@ jobs:
 
       - name: Build
         run: pnpm run build
+
+      # Exercise the real consumer path: commitlint loads this repo's config
+      # (which registers the plugin + rule) and lints sample messages.
+      - name: Integration (commitlint CLI against this config)
+        run: |
+          set -e
+          echo "feat: example" | pnpm exec commitlint
+          if echo "feat: example" | CLAUDECODE=1 pnpm exec commitlint; then
+            echo "::error::agent-coauthor should reject a commit missing the trailer"
+            exit 1
+          fi
+          printf 'feat: example\n\nCo-authored-by: Claude <noreply@anthropic.com>\n' \
+            | CLAUDECODE=1 pnpm exec commitlint
