@@ -31,10 +31,10 @@ const config = {
 } satisfies UserConfig;
 
 export default config;
-export { agentCoauthor, claude, codex, defaultAgents, gemini };
 export type {
   AgentCoauthorOptions,
   AgentDefinition,
   CoAuthor,
   MatchStrategy,
 } from './types.ts';
+export { agentCoauthor, claude, codex, defaultAgents, gemini };

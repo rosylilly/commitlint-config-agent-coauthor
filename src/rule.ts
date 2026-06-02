@@ -1,7 +1,7 @@
 import type { SyncRule } from '@commitlint/types';
 
 import { defaultAgents } from './agents.ts';
-import { parseCoauthorTrailers, type ParsedTrailer } from './parse-trailers.ts';
+import { type ParsedTrailer, parseCoauthorTrailers } from './parse-trailers.ts';
 import type {
   AgentCoauthorOptions,
   AgentDefinition,
@@ -34,8 +34,7 @@ function identityMatches(
   );
   const nameEq = Boolean(
     coAuthor.name &&
-      trailer.name &&
-      trailer.name.toLowerCase().includes(coAuthor.name.toLowerCase()),
+      trailer.name?.toLowerCase().includes(coAuthor.name.toLowerCase()),
   );
   switch (strategy) {
     case 'name':
@@ -44,14 +43,16 @@ function identityMatches(
       return emailEq || nameEq;
     case 'both':
       return emailEq && nameEq;
-    case 'email':
     default:
+      // 'email' — the default strategy
       return emailEq;
   }
 }
 
 function formatIdentity(coAuthor: CoAuthor): string {
-  return coAuthor.email ? `${coAuthor.name} <${coAuthor.email}>` : coAuthor.name;
+  return coAuthor.email
+    ? `${coAuthor.name} <${coAuthor.email}>`
+    : coAuthor.name;
 }
 
 /**
@@ -79,7 +80,9 @@ export const agentCoauthor: SyncRule<AgentCoauthorOptions> = (
 
   const trailers = parseCoauthorTrailers(parsed.raw ?? '', trailerName);
   const credited = active.filter((agent) =>
-    trailers.some((trailer) => identityMatches(agent.coAuthor, trailer, strategy)),
+    trailers.some((trailer) =>
+      identityMatches(agent.coAuthor, trailer, strategy),
+    ),
   );
 
   if (!negated) {

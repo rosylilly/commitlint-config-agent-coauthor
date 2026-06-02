@@ -24,4 +24,6 @@ for (const file of files) {
   }
 }
 
-console.log(`rewrote .ts→.js specifiers in ${changed}/${files.length} declaration file(s)`);
+console.log(
+  `rewrote .ts→.js specifiers in ${changed}/${files.length} declaration file(s)`,
+);

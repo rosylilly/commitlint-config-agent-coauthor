@@ -2,9 +2,8 @@ import assert from 'node:assert/strict';
 import { test } from 'node:test';
 
 import parse from '@commitlint/parse';
-
-import { agentCoauthor } from '../src/index.ts';
 import type { AgentDefinition } from '../src/index.ts';
+import { agentCoauthor } from '../src/index.ts';
 
 const CLAUDE_ENV = { CLAUDECODE: '1' };
 
@@ -24,14 +23,19 @@ test('fails when an agent is active but no co-author trailer is present', async 
 });
 
 test('passes when the agent email is credited even if the name differs', async () => {
-  const commit = 'feat: x\n\nCo-authored-by: Claude Opus 4.8 <noreply@anthropic.com>';
-  const [valid] = agentCoauthor(await parsed(commit), 'always', { env: CLAUDE_ENV });
+  const commit =
+    'feat: x\n\nCo-authored-by: Claude Opus 4.8 <noreply@anthropic.com>';
+  const [valid] = agentCoauthor(await parsed(commit), 'always', {
+    env: CLAUDE_ENV,
+  });
   assert.equal(valid, true);
 });
 
 test('fails when the credited email does not match (default match: email)', async () => {
   const commit = 'feat: x\n\nCo-authored-by: Claude <someone@example.com>';
-  const [valid] = agentCoauthor(await parsed(commit), 'always', { env: CLAUDE_ENV });
+  const [valid] = agentCoauthor(await parsed(commit), 'always', {
+    env: CLAUDE_ENV,
+  });
   assert.equal(valid, false);
 });
 
@@ -46,14 +50,18 @@ test('match "either" accepts a name-only trailer', async () => {
 
 test('"never" rejects crediting an active agent', async () => {
   const commit = 'feat: x\n\nCo-authored-by: Claude <noreply@anthropic.com>';
-  const [valid] = agentCoauthor(await parsed(commit), 'never', { env: CLAUDE_ENV });
+  const [valid] = agentCoauthor(await parsed(commit), 'never', {
+    env: CLAUDE_ENV,
+  });
   assert.equal(valid, false);
 });
 
 test('reports only the active agents that are still uncredited', async () => {
   const env = { CLAUDECODE: '1', CODEX_THREAD_ID: 'thread_abc' };
   const commit = 'feat: x\n\nCo-authored-by: Codex <noreply@openai.com>';
-  const [valid, message] = agentCoauthor(await parsed(commit), 'always', { env });
+  const [valid, message] = agentCoauthor(await parsed(commit), 'always', {
+    env,
+  });
   assert.equal(valid, false);
   assert.match(message ?? '', /anthropic/);
   assert.doesNotMatch(message ?? '', /openai/);
@@ -70,11 +78,17 @@ test('honours a custom agent registry with detect()', async () => {
   ];
   const env = { MY_BOT: 'yes' };
 
-  const [missing] = agentCoauthor(await parsed('feat: x'), 'always', { agents, env });
+  const [missing] = agentCoauthor(await parsed('feat: x'), 'always', {
+    agents,
+    env,
+  });
   assert.equal(missing, false);
 
   const commit = 'feat: x\n\nCo-authored-by: Bot <bot@example.com>';
-  const [credited] = agentCoauthor(await parsed(commit), 'always', { agents, env });
+  const [credited] = agentCoauthor(await parsed(commit), 'always', {
+    agents,
+    env,
+  });
   assert.equal(credited, true);
 });
 

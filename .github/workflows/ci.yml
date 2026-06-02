@@ -13,6 +13,26 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  # Biome formatter + linter (independent of the commitlint version, so it runs
+  # once rather than per matrix leg).
+  lint:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install pnpm
+        uses: pnpm/action-setup@v6
+      - name: Setup Node.js
+        uses: actions/setup-node@v6
+        with:
+          node-version-file: .tool-versions
+          cache: pnpm
+      - name: Install dependencies
+        run: pnpm install --frozen-lockfile
+        env:
+          HUSKY: 0
+      - name: Biome
+        run: pnpm exec biome ci
+
   test:
     runs-on: ubuntu-latest
     # The integration surface is commitlint's API/types, not the Node version
