@@ -5,18 +5,11 @@
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot&logoColor=white)](./.github/dependabot.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
 
-A shareable [commitlint](https://commitlint.js.org/) config that **requires a
-`Co-authored-by` trailer for AI agents**. When a commit is made from inside an
-agent's environment (Claude Code, OpenAI Codex, Gemini CLI, …), the agent must
-be credited as a co-author — otherwise the commit is rejected.
+A shareable [commitlint](https://commitlint.js.org/) config that **requires a `Co-authored-by` trailer for AI agents**. When a commit is made from inside an agent's environment (Claude Code, OpenAI Codex, Gemini CLI, …), the agent must be credited as a co-author — otherwise the commit is rejected.
 
-Detection is driven entirely by environment variables, so the rule is a **no-op
-for human commits** and only kicks in when an agent is actually running.
+Detection is driven entirely by environment variables, so the rule is a **no-op for human commits** and only kicks in when an agent is actually running.
 
-Ships as TypeScript-built JavaScript with type declarations and **no `dependencies`**.
-The declarations reference `@commitlint/types`, declared as an *optional*
-`peerDependency` — it's already in your tree via commitlint, so nothing extra is
-installed (it only matters when you type-check against these declarations).
+Ships as TypeScript-built JavaScript with type declarations and **no `dependencies`**. The declarations reference `@commitlint/types`, declared as an *optional* `peerDependency` — it's already in your tree via commitlint, so nothing extra is installed (it only matters when you type-check against these declarations).
 
 ## How it works
 
@@ -26,8 +19,7 @@ installed (it only matters when you type-check against these declarations).
 | OpenAI Codex | `CODEX_THREAD_ID` | `Co-authored-by: Codex <noreply@openai.com>` |
 | Gemini CLI | `GEMINI_CLI` | `Co-authored-by: Gemini <gemini-code-assist@google.com>` |
 
-Matching is by **email** by default — display names drift between releases
-(`Claude`, `Claude Opus 4.8`, …) but the address is stable.
+Matching is by **email** by default — display names drift between releases (`Claude`, `Claude Opus 4.8`, …) but the address is stable.
 
 ## Install
 
@@ -55,8 +47,7 @@ pnpm exec commitlint --edit "$1"
 
 ## Configuration
 
-The rule is registered as `agent-coauthor` and accepts an options object as its
-third value:
+The rule is registered as `agent-coauthor` and accepts an options object as its third value:
 
 ```js
 export default {
@@ -102,13 +93,11 @@ import config, {
 } from 'commitlint-config-agent-coauthor';
 ```
 
-Types (`AgentDefinition`, `AgentCoauthorOptions`, `CoAuthor`, `MatchStrategy`,
-`ParsedCommit`, `RuleCondition`, `RuleOutcome`) are exported too.
+Types (`AgentDefinition`, `AgentCoauthorOptions`, `CoAuthor`, `MatchStrategy`, `ParsedCommit`, `RuleCondition`, `RuleOutcome`) are exported too.
 
 ## Development
 
-Source is TypeScript in `src/`, run directly via Node's native type stripping —
-no build step needed for local work:
+Source is TypeScript in `src/`, run directly via Node's native type stripping — no build step needed for local work:
 
 ```sh
 pnpm test        # node --test (runs the .ts tests as-is)
@@ -116,13 +105,11 @@ pnpm typecheck   # tsc --noEmit over src + test
 pnpm build       # emit dist/ (JS + .d.ts) for publishing
 ```
 
-`pnpm build` compiles with `tsc` and rewrites the `.ts` import specifiers in the
-emitted declarations to `.js`. Publishing runs it automatically via `prepack`.
+`pnpm build` compiles with `tsc` and rewrites the `.ts` import specifiers in the emitted declarations to `.js`. Publishing runs it automatically via `prepack`.
 
 ## Changelog
 
-See [`CHANGELOG.md`](./CHANGELOG.md) or the
-[GitHub releases](https://github.com/rosylilly/commitlint-config-agent-coauthor/releases).
+See [`CHANGELOG.md`](./CHANGELOG.md) or the [GitHub releases](https://github.com/rosylilly/commitlint-config-agent-coauthor/releases).
 
 ## License
 
