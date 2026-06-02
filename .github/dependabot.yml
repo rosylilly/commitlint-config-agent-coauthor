@@ -1,0 +1,29 @@
+version: 2
+updates:
+  # npm dependencies. The @commitlint/* packages are versioned in lockstep, so
+  # group them into a single PR to avoid a broken mix (e.g. cli@22 + types@21).
+  - package-ecosystem: npm
+    directory: "/"
+    schedule:
+      interval: weekly
+    open-pull-requests-limit: 10
+    commit-message:
+      prefix: chore
+      prefix-development: chore
+    groups:
+      commitlint:
+        patterns:
+          - "@commitlint/*"
+
+  # GitHub Actions used in workflows. One grouped PR per run keeps action bumps
+  # together.
+  - package-ecosystem: github-actions
+    directory: "/"
+    schedule:
+      interval: weekly
+    commit-message:
+      prefix: ci
+    groups:
+      actions:
+        patterns:
+          - "*"
