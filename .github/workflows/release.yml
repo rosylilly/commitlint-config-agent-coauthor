@@ -29,9 +29,9 @@ jobs:
       # without checks.
       - uses: actions/create-github-app-token@v3
         id: app-token
-        if: ${{ vars.RELEASE_APP_ID != '' }}
+        if: ${{ vars.RELEASE_APP_CLIENT_ID != '' }}
         with:
-          app-id: ${{ vars.RELEASE_APP_ID }}
+          client-id: ${{ vars.RELEASE_APP_CLIENT_ID }}
           private-key: ${{ secrets.RELEASE_APP_PRIVATE_KEY }}
 
       - uses: googleapis/release-please-action@v5
