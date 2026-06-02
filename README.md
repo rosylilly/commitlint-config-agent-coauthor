@@ -1,5 +1,8 @@
 # commitlint-config-agent-coauthor
 
+[![CI](https://github.com/rosylilly/commitlint-config-agent-coauthor/actions/workflows/ci.yml/badge.svg)](https://github.com/rosylilly/commitlint-config-agent-coauthor/actions/workflows/ci.yml)
+[![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
+
 A shareable [commitlint](https://commitlint.js.org/) config that **requires a
 `Co-authored-by` trailer for AI agents**. When a commit is made from inside an
 agent's environment (Claude Code, OpenAI Codex, Gemini CLI, …), the agent must
