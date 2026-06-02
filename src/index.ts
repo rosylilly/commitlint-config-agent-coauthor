@@ -34,6 +34,7 @@ export default config;
 export type {
   AgentCoauthorOptions,
   AgentDefinition,
+  AppliesTo,
   CoAuthor,
   MatchStrategy,
 } from './types.ts';
