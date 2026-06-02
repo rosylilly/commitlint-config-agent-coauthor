@@ -17,6 +17,11 @@ updates:
       commitlint:
         patterns:
           - "@commitlint/*"
+      dev-dependencies:
+        patterns:
+          - "*"
+        exclude-patterns:
+          - "@commitlint/*"
 
   # GitHub Actions used in workflows. One grouped PR per run keeps action bumps
   # together.
