@@ -61,6 +61,7 @@ jobs:
       - run: pnpm install --frozen-lockfile
         env:
           HUSKY: 0
+      # Auth via npm OIDC trusted publishing — no token. Requires a Trusted
+      # Publisher configured on npmjs for this repo + workflow, and npm >= 11.5.0
+      # (bundled with the Node in .tool-versions). Provenance is automatic.
       - run: npm publish --provenance --access public --ignore-scripts
-        env:
-          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
