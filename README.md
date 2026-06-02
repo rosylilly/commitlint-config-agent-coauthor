@@ -1,5 +1,6 @@
 # commitlint-config-agent-coauthor
 
+[![npm](https://img.shields.io/npm/v/commitlint-config-agent-coauthor)](https://www.npmjs.com/package/commitlint-config-agent-coauthor)
 [![CI](https://github.com/rosylilly/commitlint-config-agent-coauthor/actions/workflows/ci.yml/badge.svg)](https://github.com/rosylilly/commitlint-config-agent-coauthor/actions/workflows/ci.yml)
 [![Dependabot](https://img.shields.io/badge/Dependabot-enabled-025E8C?logo=dependabot&logoColor=white)](./.github/dependabot.yml)
 [![License: MIT](https://img.shields.io/badge/license-MIT-blue.svg)](./LICENSE)
