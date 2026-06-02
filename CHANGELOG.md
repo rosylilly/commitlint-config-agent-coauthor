@@ -1,5 +1,12 @@
 # Changelog
 
+## [0.1.1](https://github.com/rosylilly/commitlint-config-agent-coauthor/compare/v0.1.0...v0.1.1) (2026-06-02)
+
+
+### Documentation
+
+* link to the changelog from the README ([439db2f](https://github.com/rosylilly/commitlint-config-agent-coauthor/commit/439db2f86f918eb875d2142cea3855ee76fd0532))
+
 ## 0.1.0 (2026-06-02)
 
 
