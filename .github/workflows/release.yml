@@ -21,6 +21,7 @@ jobs:
     outputs:
       release_created: ${{ steps.release.outputs.release_created }}
       tag_name: ${{ steps.release.outputs.tag_name }}
+      sha: ${{ steps.release.outputs.sha }} # tagged merge commit; used to find the Release PR
     steps:
       # Mint a short-lived, repo-scoped GitHub App installation token. PRs opened
       # with it trigger CI / Commit Lint (the default GITHUB_TOKEN does not start
@@ -65,3 +66,31 @@ jobs:
       # Publisher configured on npmjs for this repo + workflow, and npm >= 11.5.0
       # (bundled with the Node in .tool-versions). Provenance is automatic.
       - run: npm publish --provenance --access public --ignore-scripts
+
+  # release-please only takes the lifecycle as far as `autorelease: tagged`;
+  # `autorelease: published` is a convention left to the publishing tool. Flip
+  # the Release PR to it once the package is actually on npm — gated on
+  # `npm-stable`, so the label tracks reality, and kept in its own job so the
+  # `pull-requests: write` it needs stays off the OIDC publish job.
+  mark-published:
+    needs: [release-please, npm-stable]
+    if: ${{ needs.release-please.outputs.release_created == 'true' }}
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write # relabel the Release PR
+    env:
+      GH_TOKEN: ${{ github.token }}
+      GH_REPO: ${{ github.repository }}
+    steps:
+      # The `autorelease: published` label is created once as repo setup, so this
+      # job only needs to resolve the Release PR from the tagged merge commit and
+      # swap `tagged` → `published`.
+      - run: |
+          pr=$(gh api "repos/${GH_REPO}/commits/${{ needs.release-please.outputs.sha }}/pulls" --jq '.[0].number')
+          if [ -z "$pr" ]; then
+            echo "::warning::no PR found for ${{ needs.release-please.outputs.sha }}; skipping relabel"
+            exit 0
+          fi
+          gh pr edit "$pr" \
+            --remove-label "autorelease: tagged" \
+            --add-label "autorelease: published"
