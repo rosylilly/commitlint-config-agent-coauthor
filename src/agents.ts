@@ -34,5 +34,17 @@ export const gemini: AgentDefinition = {
   coAuthor: { name: 'Gemini', email: 'gemini-code-assist@google.com' },
 };
 
+/**
+ * Cursor CLI (`cursor-agent`) sets `CURSOR_AGENT` while it runs commands — the
+ * documented way to detect a Cursor session from a shell config — and credits
+ * `Co-authored-by: Cursor <cursoragent@cursor.com>`.
+ */
+export const cursor: AgentDefinition = {
+  id: 'cursor',
+  name: 'Cursor CLI',
+  env: ['CURSOR_AGENT'],
+  coAuthor: { name: 'Cursor', email: 'cursoragent@cursor.com' },
+};
+
 /** Built-in agents checked by default. Override via the rule's `agents` option. */
-export const defaultAgents: AgentDefinition[] = [claude, codex, gemini];
+export const defaultAgents: AgentDefinition[] = [claude, codex, gemini, cursor];

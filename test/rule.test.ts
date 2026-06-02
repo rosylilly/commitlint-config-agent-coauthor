@@ -67,6 +67,19 @@ test('reports only the active agents that are still uncredited', async () => {
   assert.doesNotMatch(message ?? '', /openai/);
 });
 
+test('detects Cursor via CURSOR_AGENT and requires its trailer', async () => {
+  const env = { CURSOR_AGENT: '1' };
+  const [missing, message] = agentCoauthor(await parsed('feat: x'), 'always', {
+    env,
+  });
+  assert.equal(missing, false);
+  assert.match(message ?? '', /cursoragent@cursor\.com/);
+
+  const commit = 'feat: x\n\nCo-authored-by: Cursor <cursoragent@cursor.com>';
+  const [credited] = agentCoauthor(await parsed(commit), 'always', { env });
+  assert.equal(credited, true);
+});
+
 test('honours a custom agent registry with detect()', async () => {
   const agents: AgentDefinition[] = [
     {

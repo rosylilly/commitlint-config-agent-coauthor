@@ -1,5 +1,5 @@
 import type { UserConfig } from '@commitlint/types';
-import { claude, codex, defaultAgents, gemini } from './agents.ts';
+import { claude, codex, cursor, defaultAgents, gemini } from './agents.ts';
 import { agentCoauthor } from './rule.ts';
 
 /** Name the rule is registered and referenced under. */
@@ -37,4 +37,4 @@ export type {
   CoAuthor,
   MatchStrategy,
 } from './types.ts';
-export { agentCoauthor, claude, codex, defaultAgents, gemini };
+export { agentCoauthor, claude, codex, cursor, defaultAgents, gemini };

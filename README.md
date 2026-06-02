@@ -18,6 +18,7 @@ Ships as TypeScript-built JavaScript with type declarations and **no `dependenci
 | Claude Code | `CLAUDECODE` | `Co-authored-by: Claude <noreply@anthropic.com>` |
 | OpenAI Codex | `CODEX_THREAD_ID` | `Co-authored-by: Codex <noreply@openai.com>` |
 | Gemini CLI | `GEMINI_CLI` | `Co-authored-by: Gemini <gemini-code-assist@google.com>` |
+| Cursor CLI | `CURSOR_AGENT` | `Co-authored-by: Cursor <cursoragent@cursor.com>` |
 
 Matching is by **email** by default — display names drift between releases (`Claude`, `Claude Opus 4.8`, …) but the address is stable.
 
@@ -89,7 +90,7 @@ import config, {
   agentCoauthor,   // the raw rule function
   plugin,          // { rules: { 'agent-coauthor': agentCoauthor } }
   defaultAgents,
-  claude, codex, gemini,
+  claude, codex, gemini, cursor,
 } from 'commitlint-config-agent-coauthor';
 ```
 
