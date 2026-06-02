@@ -213,9 +213,21 @@ importers:
       '@commitlint/config-conventional':
         specifier: ^21.0.2
         version: 21.0.2
+      '@commitlint/parse':
+        specifier: ^21.0.2
+        version: 21.0.2
+      '@commitlint/types':
+        specifier: ^21.0.1
+        version: 21.0.1
+      '@types/node':
+        specifier: ^25.9.1
+        version: 25.9.1
       husky:
         specifier: ^9.1.7
         version: 9.1.7
+      typescript:
+        specifier: ^6.0.3
+        version: 6.0.3
 
 packages:
 

@@ -2,10 +2,37 @@
   "name": "commitlint-config-agent-coauthor",
   "type": "module",
   "version": "1.0.0",
+  "description": "Shareable commitlint config that requires a Co-authored-by trailer for AI agents (Claude Code, OpenAI Codex, Gemini CLI, …) detected via environment variables.",
+  "keywords": [
+    "commitlint",
+    "commitlint-config",
+    "conventional-commits",
+    "git-hooks",
+    "co-authored-by",
+    "ai",
+    "agent",
+    "attribution"
+  ],
+  "main": "./dist/index.js",
+  "types": "./dist/index.d.ts",
+  "exports": {
+    ".": {
+      "types": "./dist/index.d.ts",
+      "default": "./dist/index.js"
+    }
+  },
+  "files": [
+    "dist",
+    "README.md"
+  ],
   "scripts": {
+    "build": "tsc -p tsconfig.build.json && node scripts/rewrite-dts-extensions.mjs",
+    "clean": "rm -rf dist",
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --test",
+    "prepack": "pnpm run clean && pnpm run build",
     "prepare": "husky"
   },
-  "keywords": [],
   "author": "Sho KUSANO <rosylilly@aduca.org>",
   "license": "MIT",
   "devEngines": {
@@ -15,9 +42,21 @@
       "onFail": "download"
     }
   },
+  "peerDependencies": {
+    "@commitlint/types": ">=19"
+  },
+  "peerDependenciesMeta": {
+    "@commitlint/types": {
+      "optional": true
+    }
+  },
   "devDependencies": {
     "@commitlint/cli": "^21.0.2",
     "@commitlint/config-conventional": "^21.0.2",
-    "husky": "^9.1.7"
+    "@commitlint/parse": "^21.0.2",
+    "@commitlint/types": "^21.0.1",
+    "@types/node": "^25.9.1",
+    "husky": "^9.1.7",
+    "typescript": "^6.0.3"
   }
 }
