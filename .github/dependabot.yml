@@ -1,7 +1,10 @@
 version: 2
 updates:
-  # npm dependencies. The @commitlint/* packages are versioned in lockstep, so
-  # group them into a single PR to avoid a broken mix (e.g. cli@22 + types@21).
+  # npm dependencies (pnpm). Dependabot resolves the pnpm version from the
+  # packageManager field in package.json via corepack, so lockfile updates use
+  # the same pnpm major that generated pnpm-lock.yaml. The @commitlint/* packages
+  # are versioned in lockstep, so group them into one PR to avoid a broken mix
+  # (e.g. cli@22 + types@21).
   - package-ecosystem: npm
     directory: "/"
     schedule:
