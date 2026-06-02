@@ -60,9 +60,11 @@ function formatIdentity(coAuthor: CoAuthor): string {
  * commit message must credit that agent with a co-author trailer.
  *
  * - `always` (default): every active agent must be credited.
- * - `never`: no active agent may be credited.
+ * - `never`: no active agent may be credited. With `appliesTo: 'configured'`,
+ *   forbid every configured agent's trailer regardless of the environment.
  *
- * Returns `[true]` when no agent is active, so the rule is a no-op for humans.
+ * Returns `[true]` when there are no candidate agents, so the rule is a no-op
+ * for humans (and, in the default `never`, for any non-agent environment).
  */
 export const agentCoauthor: SyncRule<AgentCoauthorOptions> = (
   parsed,
@@ -75,18 +77,23 @@ export const agentCoauthor: SyncRule<AgentCoauthorOptions> = (
   const strategy = value.match ?? 'email';
   const negated = when === 'never';
 
-  const active = agents.filter((agent) => isActive(agent, env));
-  if (active.length === 0) return [true];
+  // `never` + `appliesTo: 'configured'` forbids known trailers regardless of
+  // the environment; every other case only considers env-detected agents.
+  const candidates =
+    negated && value.appliesTo === 'configured'
+      ? agents
+      : agents.filter((agent) => isActive(agent, env));
+  if (candidates.length === 0) return [true];
 
   const trailers = parseCoauthorTrailers(parsed.raw ?? '', trailerName);
-  const credited = active.filter((agent) =>
+  const credited = candidates.filter((agent) =>
     trailers.some((trailer) =>
       identityMatches(agent.coAuthor, trailer, strategy),
     ),
   );
 
   if (!negated) {
-    const missing = active.filter((agent) => !credited.includes(agent));
+    const missing = candidates.filter((agent) => !credited.includes(agent));
     if (missing.length === 0) return [true];
     const who = missing.map((agent) => agent.name ?? agent.id).join(', ');
     const expected = missing

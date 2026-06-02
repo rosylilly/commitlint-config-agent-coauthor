@@ -82,6 +82,24 @@ export default {
 | `env` | `process.env` | Environment to read (handy for tests). |
 | `trailerName` | `"Co-authored-by"` | Trailer token to look for. |
 | `match` | `"email"` | `email`, `name` (substring), `either`, or `both`. |
+| `appliesTo` | `"detected"` | For `never`: forbid trailers from `detected` agents only (env-gated) or every `configured` agent (env-independent). Ignored by `always`. |
+
+### Forbidding the trailer
+
+Set the condition to `never` to invert the rule — an AI co-author trailer becomes something to reject rather than require. There are two scopes:
+
+```js
+// "a locally-running agent must not credit itself" — fires only when an agent
+// is detected here; a no-op for human and CI commits.
+'agent-coauthor': [2, 'never'],
+
+// "no AI co-author trailers in this repo, ever, from anywhere" — rejects any
+// known agent's trailer regardless of environment, so it also catches trailers
+// added on CI, pasted by hand, or arriving via a pull request.
+'agent-coauthor': [2, 'never', { appliesTo: 'configured' }],
+```
+
+Use the default (`appliesTo: 'detected'`) to police the agents running in your own environment; use `appliesTo: 'configured'` to enforce a repo-wide policy against AI co-author trailers. This package exists to encourage honest AI attribution, so treat the forbid modes as a deliberate, opt-in policy choice.
 
 ### Programmatic exports
 
@@ -94,7 +112,7 @@ import config, {
 } from 'commitlint-config-agent-coauthor';
 ```
 
-Types (`AgentDefinition`, `AgentCoauthorOptions`, `CoAuthor`, `MatchStrategy`, `ParsedCommit`, `RuleCondition`, `RuleOutcome`) are exported too.
+Types (`AgentDefinition`, `AgentCoauthorOptions`, `CoAuthor`, `MatchStrategy`, `AppliesTo`, `ParsedCommit`, `RuleCondition`, `RuleOutcome`) are exported too.
 
 ## Development
 

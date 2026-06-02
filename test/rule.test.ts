@@ -66,6 +66,31 @@ test('"never" rejects crediting an active agent', async () => {
   assert.equal(valid, false);
 });
 
+test('"never" (default detected) ignores a trailer when no agent env is set', async () => {
+  const commit = 'feat: x\n\nCo-authored-by: Claude <noreply@anthropic.com>';
+  const [valid] = agentCoauthor(await parsed(commit), 'never', { env: {} });
+  assert.equal(valid, true);
+});
+
+test('"never" + appliesTo "configured" forbids a known trailer with no agent env', async () => {
+  const commit = 'feat: x\n\nCo-authored-by: Claude <noreply@anthropic.com>';
+  const [valid, message] = agentCoauthor(await parsed(commit), 'never', {
+    env: {},
+    appliesTo: 'configured',
+  });
+  assert.equal(valid, false);
+  assert.match(message ?? '', /must not be present/);
+});
+
+test('"never" + appliesTo "configured" passes when no known trailer is present', async () => {
+  const commit = 'feat: x\n\nCo-authored-by: Someone <human@example.com>';
+  const [valid] = agentCoauthor(await parsed(commit), 'never', {
+    env: {},
+    appliesTo: 'configured',
+  });
+  assert.equal(valid, true);
+});
+
 test('reports only the active agents that are still uncredited', async () => {
   const env = { CLAUDECODE: '1', CODEX_THREAD_ID: 'thread_abc' };
   const commit = 'feat: x\n\nCo-authored-by: Codex <noreply@openai.com>';
