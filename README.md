@@ -89,8 +89,8 @@ export default {
 import config, {
   agentCoauthor,   // the raw rule function
   plugin,          // { rules: { 'agent-coauthor': agentCoauthor } }
-  defaultAgents,
-  claude, codex, gemini, cursor,
+  agents,          // built-ins keyed by id: agents.claude, agents.cursor, …
+  defaultAgents,   // Object.values(agents) — the default registry, as an array
 } from 'commitlint-config-agent-coauthor';
 ```
 
